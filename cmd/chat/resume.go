@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/Delta456/box-cli-maker/v2"
 	"github.com/fatih/color"
+	"github.com/pang0103/go-chatgpt-cli/cmd/config"
 	"github.com/sashabaranov/go-openai"
 	"github.com/spf13/cobra"
 	"io"
@@ -60,11 +61,11 @@ func resumeConversation() {
 			Content: message,
 		})
 
-		client := openai.NewClient(API_KEY)
+		client := openai.NewClient(config.Conf.ApiKey)
 		stream, err := client.CreateChatCompletionStream(
 			context.Background(),
 			openai.ChatCompletionRequest{
-				Model:    openai.GPT3Dot5Turbo,
+				Model:    config.Conf.Model,
 				Messages: messages,
 				Stream:   true,
 			},

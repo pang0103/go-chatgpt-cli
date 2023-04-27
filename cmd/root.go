@@ -4,14 +4,15 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/pang0103/toolbox-cli/cmd/chat"
+	"github.com/pang0103/go-chatgpt-cli/cmd/chat"
+	"github.com/pang0103/go-chatgpt-cli/cmd/config"
 	"github.com/spf13/cobra"
 	"os"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "toolbox-cli",
+	Use:   "go-chatgpt-cli",
 	Short: "Start a conversation with ChatGPT",
 	Long:  `Start a conversation with ChatGPT`,
 	// Uncomment the following line if your bare application
@@ -32,6 +33,7 @@ func Execute() {
 
 func addSubComamndsPalettes() {
 	rootCmd.AddCommand(chat.ChatCmd)
+	rootCmd.AddCommand(config.ConfigCmd)
 
 }
 
@@ -44,7 +46,6 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	addSubComamndsPalettes()
 }

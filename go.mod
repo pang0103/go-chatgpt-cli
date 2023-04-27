@@ -1,4 +1,4 @@
-module github.com/pang0103/toolbox-cli
+module github.com/pang0103/go-chatgpt-cli
 
 go 1.20
 

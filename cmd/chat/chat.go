@@ -12,6 +12,7 @@ import (
 	"github.com/Delta456/box-cli-maker/v2"
 	"github.com/fatih/color"
 	"github.com/google/uuid"
+	"github.com/pang0103/go-chatgpt-cli/cmd/config"
 	"github.com/sashabaranov/go-openai"
 	"github.com/spf13/cobra"
 	"io"
@@ -30,13 +31,11 @@ var ChatCmd = &cobra.Command{
 	},
 }
 
-const API_KEY = "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"
-
 var messages []openai.ChatCompletionMessage
 
 func startNewConversation() {
 	Box := box.New(box.Config{Px: 1, Py: 1, Type: "Double", Color: "Green", TitlePos: "Top"})
-	Box.Println("Model", openai.GPT3Dot5Turbo)
+	Box.Println("Model", config.Conf.Model)
 
 	quit := false
 
@@ -63,11 +62,11 @@ func startNewConversation() {
 			Content: message,
 		})
 
-		client := openai.NewClient(API_KEY)
+		client := openai.NewClient(config.Conf.ApiKey)
 		stream, err := client.CreateChatCompletionStream(
 			context.Background(),
 			openai.ChatCompletionRequest{
-				Model:    openai.GPT3Dot5Turbo,
+				Model:    config.Conf.Model,
 				Messages: messages,
 				Stream:   true,
 			},
@@ -167,12 +166,12 @@ func getConversation(id string) Conversation {
 func generateTopic(messages []openai.ChatCompletionMessage) string {
 	prompt := "Write an extremely concise subtitle for this conversation with no more than a few words. All words should be capitalized. Exclude punctuation."
 
-	client := openai.NewClient(API_KEY)
+	client := openai.NewClient(config.Conf.ApiKey)
 
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: config.Conf.Model,
 			Messages: append(messages, openai.ChatCompletionMessage{
 				Role:    openai.ChatMessageRoleUser,
 				Content: prompt,
