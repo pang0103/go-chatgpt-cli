@@ -61,7 +61,6 @@ func resumeConversation() {
 			Content: message,
 		})
 
-		client := openai.NewClient(config.Conf.ApiKey)
 		stream, err := client.CreateChatCompletionStream(
 			context.Background(),
 			openai.ChatCompletionRequest{

@@ -16,8 +16,8 @@ import (
 	"github.com/sashabaranov/go-openai"
 	"github.com/spf13/cobra"
 	"io"
-	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -33,13 +33,13 @@ var ChatCmd = &cobra.Command{
 
 var messages []openai.ChatCompletionMessage
 
+var client = openai.NewClient(config.Conf.ApiKey)
+
 func startNewConversation() {
 	Box := box.New(box.Config{Px: 1, Py: 1, Type: "Double", Color: "Green", TitlePos: "Top"})
 	Box.Println("Model", config.Conf.Model)
 
-	quit := false
-
-	for !quit {
+	for {
 
 		color.New(color.FgGreen).Printf("You: ")
 
@@ -62,7 +62,6 @@ func startNewConversation() {
 			Content: message,
 		})
 
-		client := openai.NewClient(config.Conf.ApiKey)
 		stream, err := client.CreateChatCompletionStream(
 			context.Background(),
 			openai.ChatCompletionRequest{
@@ -104,10 +103,13 @@ func startNewConversation() {
 	fmt.Printf("Conversation finished")
 }
 
+var (
+	cacheFilePath = filepath.Join(os.Getenv("HOME"), ".go-chatgpt-cli-cache.json")
+)
+
 func saveConversation(messages []openai.ChatCompletionMessage) {
 	fmt.Println("Saving conversation...")
 
-	// Create a new conversation object with a UUID, the given messages, and a topic
 	conversation := Conversation{
 		Id:       uuid.New().String(),
 		Messages: messages,
@@ -117,7 +119,6 @@ func saveConversation(messages []openai.ChatCompletionMessage) {
 	// Read the existing conversations from the JSON file
 	conversations := loadConversation()
 
-	// Append the new conversation to the existing conversations
 	conversations = append(conversations, conversation)
 
 	// Encode the conversations to a JSON-encoded byte slice
@@ -126,8 +127,7 @@ func saveConversation(messages []openai.ChatCompletionMessage) {
 		panic(err)
 	}
 
-	// Write the byte slice to the JSON file
-	err = ioutil.WriteFile("cache.json", jsonData, 0644)
+	err = os.WriteFile(cacheFilePath, jsonData, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -137,7 +137,8 @@ func saveConversation(messages []openai.ChatCompletionMessage) {
 
 func loadConversation() []Conversation {
 	// Read the existing conversations from the JSON file
-	fileData, err := os.ReadFile("cache.json")
+
+	fileData, err := os.ReadFile(cacheFilePath)
 	if err != nil {
 		fmt.Println("No conversation found.")
 		return []Conversation{}
@@ -165,8 +166,6 @@ func getConversation(id string) Conversation {
 
 func generateTopic(messages []openai.ChatCompletionMessage) string {
 	prompt := "Write an extremely concise subtitle for this conversation with no more than a few words. All words should be capitalized. Exclude punctuation."
-
-	client := openai.NewClient(config.Conf.ApiKey)
 
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
