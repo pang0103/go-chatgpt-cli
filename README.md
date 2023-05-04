@@ -2,7 +2,7 @@
 
 <img clt="cli-chat-demo" src="./demos/cli-chat.gif"/>
 <h4>Chat with ChatGPT in terminal</h4>
-<img clt="cli-chat-demo" src="./demos/cli-chat-video.png"/>
+<img clt="cli-chat-demo" src="./demos/cli-video.gif"/>
 <h4>ChatGPT to summarize a youtube video</h4>
 
 # What is this?

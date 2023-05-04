@@ -43,7 +43,11 @@ var ListenCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		Box.Println("Video summary", summarizeByTranscript(transcript))
+		videoSummary := summarizeByTranscript(transcript)
+		fmt.Println()
+		fmt.Println("Video summary: ")
+		fmt.Println(videoSummary)
+
 		startNewConversation(IntroductionBox{
 			title:   "ChatGPT",
 			message: "Start a conversation based on the video content",
