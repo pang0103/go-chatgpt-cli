@@ -14,8 +14,9 @@ import (
 )
 
 type Config struct {
-	ApiKey string `json:"api_key"`
-	Model  string `json:"model"`
+	ApiKey        string `json:"api_key"`
+	Model         string `json:"model"`
+	AssemblyaiKey string `json:"assemblyai_key"`
 }
 
 var (

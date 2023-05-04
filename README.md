@@ -1,8 +1,9 @@
 <p align="center">
     <img clt="cli-chat-demo" src="./demos/cli-chat.gif"/>
+    <img clt="cli-chat-demo" src="./demos/cli-chat-video.png"/>
 </p>
 
-# go-chatgpt-cli
+# What is this?
 A client implementation for chatGPT using openAI api and go. This is a project built for fun and to learn more about go.
 
 
@@ -16,6 +17,7 @@ A client implementation for chatGPT using openAI api and go. This is a project b
 - `chat` - Start a new conversation 
 - `chat resume --id=xxx` - Resume a conversation 
 - `chat history` - View conversation history
+- `chat listen --url=https://youtu.be/dQw4w9WgXcQ` - Give a summary of the video, chat with chatGPT about the video
 - `config --api_key={apiKey} --model={Model}` - Configure Apikey and Language Model
 
 You can also use `--help` to view the help menu for each command.
@@ -25,7 +27,9 @@ You can also use `--help` to view the help menu for each command.
 ## Prerequisites
 - [Go](https://golang.org/doc/install)
 - [OpenAI Api Key](https://beta.openai.com/docs/developer-quickstart/your-api-keys)
-
+- [Ffmpeg](https://ffmpeg.org/download.html) (Optional)
+- [AssemblyAI Api Key](https://app.assemblyai.com/login) (Optional)
+- 
 ## Usage
 1. Clone the repo
 ```sh

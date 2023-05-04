@@ -27,7 +27,10 @@ var ChatCmd = &cobra.Command{
 	Short: "Start a new conversation",
 	Long:  `Start a new conversation`,
 	Run: func(cmd *cobra.Command, args []string) {
-		startNewConversation()
+		startNewConversation(IntroductionBox{
+			title:   "Model",
+			message: config.Conf.Model,
+		})
 	},
 }
 
@@ -35,12 +38,17 @@ var messages []openai.ChatCompletionMessage
 
 var client = openai.NewClient(config.Conf.ApiKey)
 
-func startNewConversation() {
-	Box := box.New(box.Config{Px: 1, Py: 1, Type: "Double", Color: "Green", TitlePos: "Top"})
-	Box.Println("Model", config.Conf.Model)
+var Box = box.New(box.Config{Px: 1, Py: 1, Type: "Double", Color: "Green", TitlePos: "Top"})
+
+type IntroductionBox struct {
+	title   string
+	message string
+}
+
+func startNewConversation(intro IntroductionBox) {
+	Box.Println(intro.title, intro.message)
 
 	for {
-
 		color.New(color.FgGreen).Printf("You: ")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -185,7 +193,36 @@ func generateTopic(messages []openai.ChatCompletionMessage) string {
 	return resp.Choices[0].Message.Content
 }
 
+func summarizeByTranscript(transcript string) string {
+	prompt := fmt.Sprintf("%s \nAbove is a transcript of a video. Write a short summary of the video in 1-2 sentences.", transcript)
+
+	messages = append(messages, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleUser,
+		Content: prompt,
+	})
+
+	resp, err := client.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model:    config.Conf.Model,
+			Messages: messages,
+		},
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	messages = append(messages, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleAssistant,
+		Content: resp.Choices[0].Message.Content,
+	})
+
+	return resp.Choices[0].Message.Content
+}
+
 func init() {
 	ChatCmd.AddCommand(historyCmd)
 	ChatCmd.AddCommand(resumeCmd)
+	ChatCmd.AddCommand(ListenCmd)
 }
