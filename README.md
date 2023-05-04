@@ -1,9 +1,10 @@
 <p align="center">
-
 <img clt="cli-chat-demo" src="./demos/cli-chat.gif"/>
-<h4>Chat with ChatGPT in terminal</h4>
+<h4><center>Chat with ChatGPT in terminal</center></h4>
+
+<p align="center">
 <img clt="cli-chat-demo" src="./demos/cli-video.gif"/>
-<h4>ChatGPT to summarize a youtube video</h4>
+<h4><center>ChatGPT to summarize a youtube video</center></h4>
 
 # What is this?
 A client implementation for chatGPT using openAI api and go. This is a project built for fun and to learn more about go.
