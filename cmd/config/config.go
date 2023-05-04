@@ -15,15 +15,16 @@ import (
 
 type Config struct {
 	ApiKey        string `json:"api_key"`
-	Model         string `json:"model"`
 	AssemblyaiKey string `json:"assemblyai_key"`
+	Model         string `json:"model"`
 }
 
 var (
 	configFilePath = filepath.Join(os.Getenv("HOME"), ".go-chatgpt-cli.json")
 	Conf           = Config{
-		ApiKey: "",
-		Model:  openai.GPT3Dot5Turbo,
+		ApiKey:        "",
+		AssemblyaiKey: "",
+		Model:         openai.GPT3Dot5Turbo,
 	}
 )
 
@@ -87,5 +88,9 @@ func init() {
 
 	if Conf.ApiKey == "" {
 		Conf.ApiKey = os.Getenv("OPENAI_API_KEY")
+	}
+
+	if Conf.AssemblyaiKey == "" {
+		Conf.AssemblyaiKey = os.Getenv("ASSEMBLYAI_API_KEY")
 	}
 }
